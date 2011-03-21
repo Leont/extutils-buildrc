@@ -4,7 +4,8 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.001';
+use Exporter 5.57 qw/import/;
+our @EXPORT_OK = qw/read_config/;
 
 use Carp qw/croak carp/;
 use File::Spec::Functions qw/catfile/;
