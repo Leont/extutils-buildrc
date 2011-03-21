@@ -28,7 +28,6 @@ sub _slurp {
 }
 
 sub read_config {
-	my $action = shift;
 	my %ret;
 
 	FILE:
@@ -42,7 +41,7 @@ sub read_config {
 		LINE:
 		for my $line (split /\n/, $content) {
 			next LINE if $line =~ / \A \s* \z /xms;  # Skip empty lines
-			if (my ($name, $args) = $line =~ m/ \A \s* (\* | [\w.-]+ ) \s+ (.*?) \s* \z /xms) {
+			if (my ($action, $args) = $line =~ m/ \A \s* (\* | [\w.-]+ ) \s+ (.*?) \s* \z /xms) {
 				push @{ $ret{$action} }, shellwords($args);
 			}
 			else {
