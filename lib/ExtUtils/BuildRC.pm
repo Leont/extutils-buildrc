@@ -5,19 +5,11 @@ use strict;
 use warnings FATAL => 'all';
 
 use Exporter 5.57 qw/import/;
-our @EXPORT_OK = qw/read_config/;
+our @EXPORT_OK = qw/read_config parse_file/;
 
 use Carp qw/croak carp/;
 use File::Spec::Functions qw/catfile/;
 use Text::ParseWords qw/shellwords/;
-
-my $NOTFOUND = -1;
-
-my @files = (
-	($ENV{MODULEBUILDRC} ? $ENV{MODULEBUILDRC}                         : ()),
-	($ENV{HOME} ?          catfile($ENV{HOME}, '.modulebuildrc')       : ()),
-	($ENV{USERPROFILE} ?   catfile($ENV{USERPROFILE}, '.modulebuldrc') : ()),
-);
 
 sub _slurp {
 	my $filename = shift;
@@ -27,30 +19,40 @@ sub _slurp {
 	return $content;
 }
 
-sub read_config {
-	my %ret;
+sub parse_file {
+	my $filename = shift;
 
+	my %ret;
+	my $content = _slurp($filename);
+
+	$content =~ s/ (?<!\\) \# [^\n]*//gxm; # Remove comments
+	$content =~ s/ \n [ \t\f]+ / /gx;      # Join multi-lines
+	LINE:
+	for my $line (split /\n/, $content) {
+		next LINE if $line =~ / \A \s* \z /xms;  # Skip empty lines
+		if (my ($action, $args) = $line =~ m/ \A \s* (\* | [\w.-]+ ) \s+ (.*?) \s* \z /xms) {
+			push @{ $ret{$action} }, shellwords($args);
+		}
+		else {
+			croak "Can't parse line '$line'";
+		}
+	}
+	return \%ret;
+}
+
+my @files = (
+	($ENV{MODULEBUILDRC} ? $ENV{MODULEBUILDRC}                          : ()),
+	($ENV{HOME}          ? catfile($ENV{HOME},        '.modulebuildrc') : ()),
+	($ENV{USERPROFILE}   ? catfile($ENV{USERPROFILE}, '.modulebuildrc') : ()),
+);
+
+sub read_config {
 	FILE:
 	for my $filename (@files) {
 		next FILE if not -e $filename;
-
-		my $content = _slurp($filename);
-
-		$content =~ s/ (?<!\\) \# [^\n]*//gxm; # Remove comments
-		$content =~ s/ \n [ \t\f]+ / /gx;      # Join multi-lines
-		LINE:
-		for my $line (split /\n/, $content) {
-			next LINE if $line =~ / \A \s* \z /xms;  # Skip empty lines
-			if (my ($action, $args) = $line =~ m/ \A \s* (\* | [\w.-]+ ) \s+ (.*?) \s* \z /xms) {
-				push @{ $ret{$action} }, shellwords($args);
-			}
-			else {
-				croak "Can't parse line '$line'";
-			}
-		}
-		last FILE;
+		return parse_file($filename);
 	}
-	return \%ret;
+	return {};
 }
 
 1;
