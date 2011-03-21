@@ -39,13 +39,13 @@ sub parse_file {
 	return \%ret;
 }
 
-my @files = (
-	($ENV{MODULEBUILDRC} ? $ENV{MODULEBUILDRC}                          : ()),
-	($ENV{HOME}          ? catfile($ENV{HOME},        '.modulebuildrc') : ()),
-	($ENV{USERPROFILE}   ? catfile($ENV{USERPROFILE}, '.modulebuildrc') : ()),
-);
-
 sub read_config {
+	my @files = (
+		($ENV{MODULEBUILDRC} ? $ENV{MODULEBUILDRC}                          : ()),
+		($ENV{HOME}          ? catfile($ENV{HOME},        '.modulebuildrc') : ()),
+		($ENV{USERPROFILE}   ? catfile($ENV{USERPROFILE}, '.modulebuildrc') : ()),
+	);
+
 	FILE:
 	for my $filename (@files) {
 		next FILE if not -e $filename;
