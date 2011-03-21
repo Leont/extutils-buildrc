@@ -57,3 +57,21 @@ sub read_config {
 1;
 
 # ABSTRACT: A reader for Build.PL configuration files
+
+=head1 SYNOPSYS
+
+ use ExtUtils::BuildRC 'read_config';
+ 
+ my $config = read_config();
+
+=head1 DESCRIPTION
+
+This module parses Build.PL configuration files.
+
+=func parse_file($filename)
+
+Read a Build.PL compatible configuration file. It returns a hash with the actions as keys and arrayrefs of arguments as values.
+
+=func read_config()
+
+Read the first Build.PL configuration file that's available in any of the locations defined by the Build.PL Spec. The data is returned in the same format as C<parse_file> does.
