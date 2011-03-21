@@ -26,9 +26,8 @@ sub parse_file {
 	my $content = _slurp($filename);
 
 	$content =~ s/ (?<!\\) \# [^\n]*//gxm; # Remove comments
-	$content =~ s/ \n [ \t\f]+ / /gx;      # Join multi-lines
 	LINE:
-	for my $line (split /\n/, $content) {
+	for my $line (split / \n (?! [ \t\f]) /x, $content) {
 		next LINE if $line =~ / \A \s* \z /xms;  # Skip empty lines
 		if (my ($action, $args) = $line =~ m/ \A \s* (\* | [\w.-]+ ) \s+ (.*?) \s* \z /xms) {
 			push @{ $ret{$action} }, shellwords($args);
