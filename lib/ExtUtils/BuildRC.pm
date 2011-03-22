@@ -63,6 +63,7 @@ sub read_config {
  use ExtUtils::BuildRC 'read_config';
  
  my $config = read_config();
+ my @build_options = (@{ $config->{build} }, @{ $config->{'*'} });
 
 =head1 DESCRIPTION
 
