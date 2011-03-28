@@ -58,7 +58,9 @@ sub read_config {
 
 # ABSTRACT: A reader for Build.PL configuration files
 
-=head1 SYNOPSYS
+__END__
+
+=head1 SYNOPSIS
 
  use ExtUtils::BuildRC 'read_config';
  
