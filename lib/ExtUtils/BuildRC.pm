@@ -9,7 +9,7 @@ our @EXPORT_OK = qw/read_config parse_file/;
 
 use Carp qw/croak carp/;
 use File::Spec::Functions qw/catfile/;
-use Text::ParseWords qw/shellwords/;
+use ExtUtils::Helpers qw/split_like_shell/;
 
 sub _slurp {
 	my $filename = shift;
@@ -30,7 +30,7 @@ sub parse_file {
 	for my $line (split / \n (?! [ \t\f]) /x, $content) {
 		next LINE if $line =~ / \A \s* \z /xms;  # Skip empty lines
 		if (my ($action, $args) = $line =~ m/ \A \s* (\* | [\w.-]+ ) \s+ (.*?) \s* \z /xms) {
-			push @{ $ret{$action} }, shellwords($args);
+			push @{ $ret{$action} }, split_like_shell($args);
 		}
 		else {
 			croak "Can't parse line '$line'";

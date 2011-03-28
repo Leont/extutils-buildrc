@@ -1,6 +1,7 @@
 Revision history for ExtUtils-BuildRC
 
 {{$NEXT}}
+          use ExtUtils::Helpers's split_like_shell for platform correct behavior
 
 0.001     2011-03-22 19:28:46 Europe/Amsterdam
-    -
+          Initial version
