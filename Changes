@@ -1,6 +1,7 @@
 Revision history for ExtUtils-BuildRC
 
 {{$NEXT}}
+          Drop Test::Differences dependency
 
 0.003     2011-05-07 11:07:02 Europe/Amsterdam
           Demand ExtUtils::Helpers 0.006
