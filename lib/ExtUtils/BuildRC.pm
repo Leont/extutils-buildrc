@@ -58,7 +58,7 @@ sub read_config {
 
 __END__
 
-# ABSTRACT: A reader for Build.PL configuration files
+# ABSTRACT: *DEPRECATED* A reader for Build.PL configuration files
 
 =head1 SYNOPSIS
 
@@ -68,6 +68,8 @@ __END__
  my @build_options = (@{ $config->{build} }, @{ $config->{'*'} });
 
 =head1 DESCRIPTION
+
+B<.modulebuildrc has been deprecated at the QA Hackathon 2013, this is part of the so called "Lancaster Consensus">.
 
 This module parses Build.PL configuration files.
 

@@ -1,6 +1,7 @@
 Revision history for ExtUtils-BuildRC
 
 {{$NEXT}}
+          Deprecate this module, along with .modulebuildrc in general
 
 0.004     2013-04-05 23:09:43 Europe/Amsterdam
           Drop Test::Differences dependency
